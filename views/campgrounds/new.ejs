@@ -1,0 +1,32 @@
+<% include ../partials/header %>
+
+  <div class="row">
+    <div class = "col-6 mx-auto">
+      <div class="row">
+       <h1 class="text-center col-7  mx-auto mt-3">Create a New Campground</h1>
+      </div>
+    <form action = "/campgrounds" method = "POST">
+      <div class= "form-group">
+        <input class= "form-control col-9 mx-auto mt-3" type = "text" name = "name" placeholder = "name">
+        <input class= "form-control col-10 mx-auto mt-3" type = "number" name = "price" placeholder = "price" min="0.01" step="0.01">
+        <input class= "form-control mt-3" type = "text" name = "image" placeholder = "image url">
+        <input class= "form-control mt-3" type = "text" name = "description" placeholder = "description">
+       <div class="row">
+         <button class="btn  btn-primary col-10  mx-auto mt-3">Submit!</button>
+       </div>
+       <div class="row">
+         <button class="btn  btn-secondary col-7  mx-auto mt-3" href = "/campgrounds">Go back</button>
+       </div>  
+           
+      </div>
+    </form>
+    </div>
+     
+  </div>
+   
+    <!--<a href = "/campgrounds">Go back</a>  -->
+
+
+
+<% include ../partials/footer %>
+
