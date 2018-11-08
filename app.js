@@ -10,13 +10,14 @@ var express       = require("express"),
     Campground    = require("./models/campground"),
     Comment       = require("./models/comment"),
     User          = require("./models/user"),
+    moment        = require("moment"),
     seedDB        = require("./seeds");
 // requiring routes   
 var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes      = require("./routes/index");
 
-var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v12";
+var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v13extras";
 mongoose.connect(url, { useNewUrlParser: true });
 //mongodb://<maklud>:<mak27lud>@ds143593.mlab.com:43593/yelpcamp
 //mongoose.connect("mongodb://maklud:mak27lud@ds143593.mlab.com:43593/yelpcamp", { useNewUrlParser: true });
@@ -28,6 +29,8 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname+ "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
+//require moment
+app.locals.moment = moment;
 //seedDB(); //seed database1
 //session before passport use!!!
 app.use(require("express-session")({    
