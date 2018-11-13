@@ -1,0 +1,33 @@
+<% include ../partials/header %>
+<% include ../functions/index %>
+
+
+
+
+<div class="row">
+  <div class="col-md-5">
+     <div class="card" style="width: 18rem; margin-top: 15px;">
+        <img class="card-img-top" src="<%=user.avatar%>" alt="user avatar">
+      <div class="card-body">
+        <h5 class="card-title">
+            <%   if(user.firstName && user.lastName){%>
+                    <%=capA(user.firstName)+" "+capA(user.lastName)%>
+           <% } %>
+        </h5>
+        <p class="card-text"><%=user.aboutMe%></p>
+        <a href="mailto:<%=user.email%>" class="btn btn-primary"><%=user.email%></a>
+      </div>
+     </div>
+  </div>
+  <div class="col-md-7">
+    <div class="mt-3">
+        <h3><%= capA(user.username)%>'s campgrounds:</h3>
+      <ul>
+          <% campgrounds.forEach(function(campground){ %>
+            <li><a href="/campgrounds/<%=campground.id%>"><%= campground.name%></a></li>
+          <% })%>
+      </ul> 
+    </div>
+  </div>
+</div>
+<% include ../partials/footer %>
