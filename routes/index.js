@@ -79,4 +79,23 @@ router.get("/users/:id", function(req,res){
     })
 });
 
+//EDIT USERS PROFILE
+router.get("/users/:id/edit",function(req, res) {
+    User.findById(req.params.id, function(err, foundUser){
+        res.render("users/edit", {user: foundUser}); 
+    }); 
+});
+//UPDATE USERS PROFILE
+router.put("/users/:id", function(req, res){
+    //find and update correct campground
+    User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedUser){
+        if(err){
+            res.redirect("/campgrounds");
+        } else {
+            res.redirect("/users/"+ req.params.id);
+        }
+    });
+    //redirect somewhere(showpage)
+});
+
 module.exports = router;
