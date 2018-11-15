@@ -79,23 +79,37 @@ router.get("/users/:id", function(req,res){
     })
 });
 
-//EDIT USERS PROFILE
+//EDIT USER PROFILE
 router.get("/users/:id/edit",function(req, res) {
     User.findById(req.params.id, function(err, foundUser){
         res.render("users/edit", {user: foundUser}); 
     }); 
 });
-//UPDATE USERS PROFILE
+//UPDATE USER PROFILE
 router.put("/users/:id", function(req, res){
     //find and update correct campground
     User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedUser){
         if(err){
+            req.flash("error", "Something went wrong.");
             res.redirect("/campgrounds");
         } else {
+            req.flash("success", "User profile updated.")
             res.redirect("/users/"+ req.params.id);
         }
     });
     //redirect somewhere(showpage)
+});
+//DESTROY USER PROFILE
+router.delete("/users/:id", function(req, res){
+    User.findByIdAndRemove(req.params.id, function(err, foundUser){
+        if(err){
+            req.flash("error", "You dont have permission to do that");
+            res.redirect("/users/"+ req.params.id);
+        } else{
+            req.flash("success", "User profile deleted.")
+            res.redirect("/campgrounds");
+        }
+    });
 });
 
 module.exports = router;

@@ -24,13 +24,13 @@
         </h5>
         <p class="card-text"><%=user.aboutMe%></p>
         <%if(user.email){%>
-        <a href="mailto:<%=user.email%>" class="btn btn-sm btn-primary"><%=user.email%></a>
+        <a href="mailto:<%=user.email%>" class="btn btn-block btn-primary"><%=user.email%></a>
         <% }%>
         
         <% if(currentUser && user._id.equals(currentUser.id) || currentUser && currentUser.isAdmin){ %>
-             <a class="btn btn-sm btn-warning" href="/users/<%= user._id%>/edit">Edit</a>
+             <a class="btn btn-block btn-warning mb-2" href="/users/<%= user._id%>/edit">Edit</a>
              <form class="deleteForm" action="/users/<%= user._id%>?_method=DELETE" method="POST">
-                 <button class="btn btn-sm btn-danger">Delete</button>
+                 <button class="btn btn-block btn-danger">Delete</button>
              </form>
         <% } %>
         

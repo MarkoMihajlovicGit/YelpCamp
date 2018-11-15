@@ -1,6 +1,7 @@
 var express    = require("express");
 var router     = express.Router();
 var Campground = require("../models/campground");
+var User = require("../models/user");
 var middleware = require("../middleware");
 // ***  INDEX ROUTE ---SHOW ALL CAMPGROUNDS ***
 
@@ -64,9 +65,14 @@ router.get("/:id", function(req, res) {
             req.flash("error", "Campground not found");
             res.redirect("back");
         } else {
-            //console.log(foundCampground);
-             //render show template with that campground
-            res.render("campgrounds/show", {campground: foundCampground});
+            User.findById(foundCampground.author.id).exec(function(err, foundUser){
+             if(err){
+                 console.log(err);
+             }else{
+                 res.render("campgrounds/show", {campground: foundCampground,user: foundUser});
+             }
+            
+            });
         }
     });
    
