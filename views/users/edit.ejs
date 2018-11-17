@@ -12,16 +12,37 @@
     <!--     <input class="form-control" type="password" name="user[password]" value="<%=user.password%>">-->
     <!--</div>-->
     <div class="form-group">
-        <input class="form-control" type="text" name="user[firstName]" value="<%=user.firstName%>">  
+        <input class="form-control" type="text" name="user[firstName]" 
+        <% if(user.firstName){ %>
+          value="<%=user.firstName%>">
+        <% }else{%>
+          placeholder="first name">
+        <% } %>  
+        
     </div>
     <div class="form-group">
-        <input class="form-control" type="text" name="user[lastName]" value="<%=user.lastName%>">  
+        <input class="form-control" type="text" name="user[lastName]" 
+        <% if(user.lastName){ %>
+          value="<%=user.lastName%>">
+        <% }else{%>
+          placeholder="last name">
+        <% } %> 
     </div>
     <div class="form-group">
-        <input class="form-control" type="email" name="user[email]" value="<%=user.email%>">  
+        <input class="form-control" type="email" name="user[email]" 
+        <% if(user.email){ %>
+          value="<%=user.email%>">
+        <% }else{%>
+          placeholder="email">
+        <% } %> 
     </div>
     <div class="form-group">
-        <input class="form-control" type="text" name="user[avatar]" value="<%=user.avatar%>">  
+        <input class="form-control" type="text" name="user[avatar]" 
+        <% if(user.avatar){ %>
+          value="<%=user.avatar%>">
+        <% }else{%>
+          placeholder="avatar">
+        <% } %> 
     </div>
     <div class="form-group">
         <textarea name="user[aboutMe]" "form-control" style="min-width: 100%"><%=user.aboutMe%></textarea>

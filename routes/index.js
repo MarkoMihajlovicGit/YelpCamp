@@ -2,7 +2,8 @@ var express    = require("express"),
     router     = express.Router(),
     User       = require("../models/user"),
     Campground = require("../models/campground"),
-    passport   = require("passport");
+    passport   = require("passport"),
+    middleware = require("../middleware");
 //root route
 router.get("/", function(req, res){
     res.render("landing");
@@ -60,17 +61,18 @@ router.get("/logout", function(req, res) {
     res.redirect("/campgrounds");
 });
 
-// USERS PROFILE
+// SHOW USERS PROFILE
 
-router.get("/users/:id", function(req,res){
+router.get("/users/:id", middleware.isLoggedIn,function(req,res){
     User.findById(req.params.id, function(err, foundUser){
-        if(err){
+        if(err || !foundUser){
             req.flash("error", "Something went wrong.");
             res.redirect("/");
         }
         //eval(require("locus"));
         Campground.find().where("author.id").equals(foundUser._id).exec(function(err, campgrounds){
-          if(err){
+            
+          if(err || !foundUser){
               req.flash("error", "Something went wrong");
               res.redirect("/");
           }
@@ -80,13 +82,13 @@ router.get("/users/:id", function(req,res){
 });
 
 //EDIT USER PROFILE
-router.get("/users/:id/edit",function(req, res) {
+router.get("/users/:id/edit", middleware.checkUser,function(req, res) {
     User.findById(req.params.id, function(err, foundUser){
         res.render("users/edit", {user: foundUser}); 
     }); 
 });
 //UPDATE USER PROFILE
-router.put("/users/:id", function(req, res){
+router.put("/users/:id", middleware.checkUser,function(req, res){
     //find and update correct campground
     User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedUser){
         if(err){
@@ -100,7 +102,7 @@ router.put("/users/:id", function(req, res){
     //redirect somewhere(showpage)
 });
 //DESTROY USER PROFILE
-router.delete("/users/:id", function(req, res){
+router.delete("/users/:id", middleware.checkUser,function(req, res){
     User.findByIdAndRemove(req.params.id, function(err, foundUser){
         if(err){
             req.flash("error", "You dont have permission to do that");

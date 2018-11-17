@@ -1,5 +1,6 @@
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
+var User = require("../models/user");
 
 // all the middleware goes here
 var middlewareObj = {};
@@ -61,6 +62,32 @@ middlewareObj.isLoggedIn=function(req, res, next){
     }
     req.flash("error", "You need to be looged in to do that");
     res.redirect("/login");
+};
+middlewareObj.checkUser = function(req, res, next){
+    //is user logged in
+         if(req.isAuthenticated()){
+               User.findById(req.params.id, function(err, foundUser){
+                    if(err || !foundUser){
+                        req.flash("error", "User not found");
+                        res.redirect("back");
+                    } else {
+                         //does foundUser matches with logged in user?
+                         //eval(require("locus"));
+                          if(foundUser._id.equals(req.user.id) || req.user.isAdmin){
+                              next(); 
+                          } else {
+                         //otherwise redirect
+                            req.flash("error", "You dont have permission to do that");
+                            res.redirect("back");
+                          }
+                       
+                    }
+               }); 
+    //if not redirect
+         }else {
+             req.flash("error", "You need to be looged in to do that");
+             res.redirect("back");
+         }
 };
 
 module.exports = middlewareObj;

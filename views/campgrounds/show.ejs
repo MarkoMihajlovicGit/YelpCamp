@@ -19,13 +19,13 @@
                      <p><%=campground.description%></p>
                      <p>
                          <em>Submitted By : 
-                         <%if(!user){%>
+                            <%if(!user){%>
                          <a href="#">
                              Anonymous
                             <% }else{%>
                          <a href="/users/<%= campground.author.id%>">
                             <%=user.username%>
-                            <%}%>
+                            <% }%>
                              </a>, <%= moment(campground.createdAt).fromNow() %></em>
                      </p>
                      <% if(currentUser && campground.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>

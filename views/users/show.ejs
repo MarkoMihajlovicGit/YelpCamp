@@ -18,7 +18,7 @@
              alt="user avatar">
       <div class="card-body">
         <h5 class="card-title">
-            <%   if(user.firstName && user.lastName){%>
+            <%   if(user.firstName || user.lastName){%>
                     <%=capA(user.firstName)+" "+capA(user.lastName)%>
            <% } %>
         </h5>
