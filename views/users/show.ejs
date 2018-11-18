@@ -1,21 +1,11 @@
 <% include ../partials/header %>
 <% include ../functions/index %>
-<% var defaultAvatar = "https://images.onepixel.com/bd716865-bb64-72c4-666c-1a5687d0e04c_1000.jpg?auto=format&q=55&mark=watermark%2Fcenter-v5.png&markalign=center%2Cmiddle&h=364&markalpha=20&s=b52cf842242cb57d6fa39a7937198f3e";%>
-
-
- 
 
 
 <div class="row">
   <div class="col-md-5">
      <div class="card" style="width: 18rem; margin-top: 15px;">
-        <img class="card-img-top" 
-        <% if(user.avatar){ %>
-            src="<%= user.avatar %>"
-        <% } else{%>  
-            src="<%= defaultAvatar%>"
-        <% }%>
-             alt="user avatar">
+        <img class="card-img-top" src="<%= user.avatar %>" alt="user avatar">
       <div class="card-body">
         <h5 class="card-title">
             <%   if(user.firstName || user.lastName){%>

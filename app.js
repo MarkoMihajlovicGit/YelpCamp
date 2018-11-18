@@ -11,6 +11,7 @@ var express       = require("express"),
     Comment       = require("./models/comment"),
     User          = require("./models/user"),
     moment        = require("moment"),
+    validator     = require('validator'),
     seedDB        = require("./seeds");
 // requiring routes   
 var commentRoutes    = require("./routes/comments"),

@@ -3,7 +3,11 @@ var express    = require("express"),
     User       = require("../models/user"),
     Campground = require("../models/campground"),
     passport   = require("passport"),
+    validator  = require('validator'),
     middleware = require("../middleware");
+    
+var defaultAvatar = "https://images.onepixel.com/bd716865-bb64-72c4-666c-1a5687d0e04c_1000.jpg?auto=format&q=55&mark=watermark%2Fcenter-v5.png&markalign=center%2Cmiddle&h=364&markalpha=20&s=b52cf842242cb57d6fa39a7937198f3e";
+
 //root route
 router.get("/", function(req, res){
     res.render("landing");
@@ -29,6 +33,9 @@ router.post("/register", function(req,res){
   
     if(req.body.adminCode ==="admin") {
         newUser.isAdmin = true;
+    }
+    if(!validator.isURL(req.body.avatar)){
+        newUser.avatar= defaultAvatar;
     }
     User.register(newUser, req.body.password, function(err, user){
         if(err){
@@ -64,7 +71,11 @@ router.get("/logout", function(req, res) {
 // SHOW USERS PROFILE
 
 router.get("/users/:id", middleware.isLoggedIn,function(req,res){
-    User.findById(req.params.id, function(err, foundUser){
+     User.findById(req.params.id, function(err, foundUser){
+        if(!validator.isURL(foundUser.avatar)){
+            foundUser.avatar= defaultAvatar;
+           
+        }
         if(err || !foundUser){
             req.flash("error", "Something went wrong.");
             res.redirect("/");
@@ -91,11 +102,13 @@ router.get("/users/:id/edit", middleware.checkUser,function(req, res) {
 router.put("/users/:id", middleware.checkUser,function(req, res){
     //find and update correct campground
     User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedUser){
+        
         if(err){
             req.flash("error", "Something went wrong.");
             res.redirect("/campgrounds");
-        } else {
-            req.flash("success", "User profile updated.")
+        }else {
+            //eval(require("locus"));
+            req.flash("success", "User profile updated.");
             res.redirect("/users/"+ req.params.id);
         }
     });

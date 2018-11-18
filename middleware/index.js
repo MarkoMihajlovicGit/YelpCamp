@@ -1,6 +1,7 @@
-var Campground = require("../models/campground");
-var Comment = require("../models/comment");
-var User = require("../models/user");
+var Campground    = require("../models/campground"),
+    Comment       = require("../models/comment"),
+    User          = require("../models/user"),
+    validator     = require('validator');
 
 // all the middleware goes here
 var middlewareObj = {};
@@ -63,6 +64,7 @@ middlewareObj.isLoggedIn=function(req, res, next){
     req.flash("error", "You need to be looged in to do that");
     res.redirect("/login");
 };
+
 middlewareObj.checkUser = function(req, res, next){
     //is user logged in
          if(req.isAuthenticated()){
