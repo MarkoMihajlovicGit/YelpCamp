@@ -13,6 +13,9 @@ var express       = require("express"),
     moment        = require("moment"),
     validator     = require('validator'),
     seedDB        = require("./seeds");
+    
+global.defaultAvatar = "https://images.onepixel.com/bd716865-bb64-72c4-666c-1a5687d0e04c_1000.jpg?auto=format&q=55&mark=watermark%2Fcenter-v5.png&markalign=center%2Cmiddle&h=364&markalpha=20&s=b52cf842242cb57d6fa39a7937198f3e";
+
 // requiring routes   
 var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),

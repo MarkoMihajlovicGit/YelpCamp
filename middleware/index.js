@@ -2,6 +2,8 @@ var Campground    = require("../models/campground"),
     Comment       = require("../models/comment"),
     User          = require("../models/user"),
     validator     = require('validator');
+    
+
 
 // all the middleware goes here
 var middlewareObj = {};
@@ -91,5 +93,12 @@ middlewareObj.checkUser = function(req, res, next){
              res.redirect("back");
          }
 };
+
+middlewareObj.validateAvatar = function(req,res,next){
+    if(!validator.isURL(req.body.user.avatar)){
+        req.body.user.avatar= global.defaultAvatar;
+    }
+        next();
+}
 
 module.exports = middlewareObj;
