@@ -24,6 +24,14 @@
              <a class="nav-item nav-link" href="#">Signed In As : <strong><%= currentUser.username %></strong></a>
              <a class="nav-item nav-link" href="/logout">Logout</a>
          <% } %>
+            <p>
+            <form class="form-inline" action="/campgrounds" method="GET"> 
+                <div class="form-group mr-auto">
+                    <input class="form-control mr-2" type="text" name="search" placeholder="Campground search...">
+                    <input class="btn btn-default" type="submit" value="Search">
+                </div>
+            </form>
+        </p>
         </div>
       </div>
     </nav>

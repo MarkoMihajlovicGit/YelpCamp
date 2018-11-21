@@ -6,16 +6,30 @@ var middleware = require("../middleware");
 // ***  INDEX ROUTE ---SHOW ALL CAMPGROUNDS ***
 
 router.get("/", function(req, res){
-   //res.render("campgrounds", {campgrounds: campgrounds});
-// Get all campgrounds from DB
-   Campground.find({}, function(err, allCampgrounds){
-       if(err){
-           console.log(err);
-       }else {
-           // now we use allCampgrounds not array campgrounds!!!
-           res.render("campgrounds/index", {campgrounds: allCampgrounds});
-       }
-   });
+    if(req.query.search){
+       var regex = new RegExp(escapeRegex(req.query.search), 'gi');
+         // Get all campgrounds from DB
+       Campground.find({name: regex}, function(err, foundCampgrounds){
+           if(err || foundCampgrounds.length<1){
+               console.log(err);
+               req.flash("error", "Campground not found");
+               res.redirect("/campgrounds");
+           }else {
+               res.render("campgrounds/index", {campgrounds: foundCampgrounds});
+           }
+       });
+    }else {
+       // Get all campgrounds from DB
+       Campground.find({}, function(err, allCampgrounds){
+           if(err){
+               console.log(err);
+           }else {
+               // now we use allCampgrounds not array campgrounds!!!
+               res.render("campgrounds/index", {campgrounds: allCampgrounds});
+           }
+       });
+    }
+
     
 });
 
@@ -106,5 +120,9 @@ router.delete("/:id", middleware.checkCampOwnership,function(req, res){
         }
     });
 });
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;
