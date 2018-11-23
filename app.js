@@ -22,7 +22,7 @@ var commentRoutes    = require("./routes/comments"),
     indexRoutes      = require("./routes/index");
 
 var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v13extras";
-mongoose.connect(url, { useNewUrlParser: true });
+mongoose.connect(url, { useCreateIndex: true, useNewUrlParser: true });
 //mongodb://<maklud>:<mak27lud>@ds143593.mlab.com:43593/yelpcamp
 //mongoose.connect("mongodb://maklud:mak27lud@ds143593.mlab.com:43593/yelpcamp", { useNewUrlParser: true });
 
@@ -53,6 +53,7 @@ app.use(function(req, res, next){
     res.locals.currentUser = req.user;
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
+    res.locals.info = req.flash("info");
     next();
 });
 
