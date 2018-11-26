@@ -24,6 +24,7 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret:process.env.CLOUDINARY_API_SECRET
 });
+
 // ***  INDEX ROUTE ---SHOW ALL CAMPGROUNDS ***
 
 router.get("/", function(req, res){
@@ -56,23 +57,49 @@ router.get("/", function(req, res){
 
 //   *** CREATE ROUTE ---ADD NEW CAMPGROUND TO DB ***
 
-router.post("/", middleware.isLoggedIn, upload.single("image"),function(req, res){
-    cloudinary.uploader.upload(req.file.path, function(result){
-        //add cloudinary url for the image to the campground object under image property
-        req.body.campground.image = result.secure_url;
-        //add author to campground
-        req.body.campground.author = {
-            id: req.user._id,
-            username: req.user.username
-        }
-        Campground.create(req.body.campground, function(err, campground){
-            if(err){
-                req.flash("error", err.message);
-                return res.redirect('back');
-            }
-            res.redirect("/campgrounds/" + campground.id);
+router.post("/", middleware.isLoggedIn,  upload.any("image"),function(req, res){
+    if(req.files.length>0){
+        cloudinary.uploader.upload(req.files[0].path, function(result){
+            //add cloudinary url for the image to the campground object under image property
+            req.body.campground.image = result.secure_url;
+            //add author to campground
+            req.body.campground.author = {
+                id: req.user._id,
+                username: req.user.username
+            };
+            Campground.create(req.body.campground, function(err, campground){
+                if(err){
+                    req.flash("error", err.message);
+                    return res.redirect('back');
+                }
+                req.flash("success", "New campground created successfully");
+                res.redirect("/campgrounds/" + campground.id);
+            });
+            
         });
+    }else{
+    //get data from form and add to campgrounds array or DB
+    var name = req.body.campground.name;
+    var price = req.body.campground.price;
+    var image = req.body.image;
+    var desc = req.body.campground.description;
+    var author = {
+        id: req.user._id,
+        username:req.user.username
+    };
+    var newCampground = {name: name, price:price,image: image, description: desc, author: author}
+       //campgrounds.push(newCampground); switched with DB
+    // Create new campground and save to DB
+    Campground.create(newCampground, function(err, newlyCreated){
+        if(err){
+            console.log(err);
+        } else {
+            req.flash("success", "New campground created successfully");
+            res.redirect("/campgrounds/" + newlyCreated.id);
+        }
     });
+    }
+     
 });
 
 // *** NEW --- SHOW FORM TO CREATE NEW CAMPGROUND ***

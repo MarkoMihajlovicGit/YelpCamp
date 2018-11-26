@@ -8,9 +8,10 @@
     <form action = "/campgrounds" method = "POST" enctype="multipart/form-data">
       <div class= "form-group">
         <input class= "form-control col-9 mx-auto mt-3" type = "text" name = "campground[name]" placeholder = "name">
-        <input class= "form-control col-10 mx-auto mt-3" type = "number" name = "price" placeholder = "price" min="0.01" step="0.01">
-        <!--<input class= "form-control mt-3" type = "text" name = "image" placeholder = "image url">-->
-        <input class= "mt-3   p-2" type = "file" name = "image" accept="image/*" required placeholder = "image">
+        <input class= "form-control col-10 mx-auto mt-3" type = "number" name = "campground[price]" placeholder = "price" min="0.01" step="0.01">
+        <input class= "form-control mt-3" type = "text" name = "image" placeholder = "image url">
+        <label class="m-2" for="file">Or upload file here</label>
+        <input class= "btn btn-info btn-block"id="file" type = "file" name = "image" accept="image/*">
         <input class= "form-control mt-3" type = "text" name = "campground[description]" placeholder = "description">
        <div class="row">
          <button class="btn  btn-primary col-10  mx-auto mt-3">Submit!</button>
@@ -24,10 +25,6 @@
     </div>
      
   </div>
-   
-    <!--<a href = "/campgrounds">Go back</a>  -->
-
-
-
+ 
 <% include ../partials/footer %>
 
