@@ -93,6 +93,8 @@ router.post("/", middleware.isLoggedIn,  upload.any("image"),function(req, res){
     Campground.create(newCampground, function(err, newlyCreated){
         if(err){
             console.log(err);
+            req.flash("error", err.message);
+            return res.redirect('back');
         } else {
             req.flash("success", "New campground created successfully");
             res.redirect("/campgrounds/" + newlyCreated.id);

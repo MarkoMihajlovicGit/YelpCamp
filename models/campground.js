@@ -1,10 +1,16 @@
-var mongoose = require("mongoose");
+var mongoose = require("mongoose"),
+  validators = require('mongoose-validators');
 
 // SCHEMA SETUP
 var campgroundSchema = new mongoose.Schema({
     name: String,
     price: String,
-    image: String,
+    image: {
+        type: String,
+        required: [true, "Please upload image file or image url"],
+        validate: validators.isURL({message: 'Must be a Valid URL'})
+        
+    },
     description: String,
     createdAt: { type: Date, default: Date.now },
     author: {
