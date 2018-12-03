@@ -11,6 +11,7 @@ var campgroundSchema = new mongoose.Schema({
         validate: validators.isURL({message: 'Must be a Valid URL'})
         
     },
+    imageId: String,
     description: String,
     createdAt: { type: Date, default: Date.now },
     author: {

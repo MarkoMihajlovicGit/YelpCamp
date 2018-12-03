@@ -5,11 +5,13 @@
       <div class="row">
        <h1 class="text-center col-7  mx-auto mt-3">Edit <%= campground.name%></h1>
       </div>
-    <form action = "/campgrounds/<%= campground._id%>?_method=PUT" method = "POST">
+    <form action = "/campgrounds/<%= campground._id%>?_method=PUT" method = "POST" enctype="multipart/form-data">
       <div class= "form-group">
         <input class= "form-control col-9 mx-auto mt-3" type = "text" name = "campground[name]" value = "<%= campground.name%>">
         <input class= "form-control col-10 mx-auto mt-3" type = "number" name = "campground[price]" value = "<%= campground.price%>" min="0.01" step="0.01">
-        <input class= "form-control mt-3" type = "text" name = "campground[image]" value = "<%= campground.image%>">
+        <input class= "form-control mt-3" type = "text" name = "image" value = "<%= campground.image%>">
+        <label class="m-2" for="file">Or upload file here</label>
+        <input class= "btn btn-info btn-block"id="file" type = "file" name = "image" accept="image/*">
         <input class= "form-control mt-3" type = "text" name = "campground[description]" value = "<%= campground.description%>">
        <div class="row">
          <button class="btn  btn-primary col-10  mx-auto mt-3">Submit!</button>
