@@ -63,8 +63,5 @@ app.use("/campgrounds",campgroundRoutes);
 app.use("/campgrounds/:id/comments" ,commentRoutes);
 
 app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Yelp Kamp Server Started ,","Gmail password is: "+process.env.GMAILPW+",",
-    "Cloudinari api key is : " +process.env.CLOUDINARY_API_KEY+",",
-    "Cloudinari secret is :" +process.env.CLOUDINARY_API_SECRET+""
-);
+    console.log("Yelp Kamp Server Started");
 });
