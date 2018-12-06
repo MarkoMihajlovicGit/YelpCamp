@@ -61,7 +61,10 @@ router.get("/", function(req, res){
 router.post("/", middleware.isLoggedIn,  upload.any("image"),function(req, res){
     if(req.files.length>0){
         
-        cloudinary.uploader.upload(req.files[0].path, function(result){
+        cloudinary.v2.uploader.upload(req.files[0].path, {width: 1000, height: 1000, crop: "limit"}, function(err, result){
+            if(err){
+                console.log(err);
+            }
             //add cloudinary url for the image to the campground object under image property
             req.body.campground.image = result.secure_url;
             //add images public_id to campground object
@@ -160,14 +163,14 @@ router.put("/:id", middleware.checkCampOwnership,upload.any('image'),function(re
                      await cloudinary.v2.uploader.destroy(campground.imageId);
                   }
                     // upload new image on cloudinary
-                  var result = await cloudinary.v2.uploader.upload(req.files[0].path);
+                  var result = await cloudinary.v2.uploader.upload(req.files[0].path, {width: 1000, height: 1000, crop: "limit"});
                   campground.image = result.secure_url;
                   campground.imageId = result.public_id;
                 } catch(err){
                   req.flash("error",err.message);
                   return res.redirect("back");  
                }
-            } //1.deo end
+            } 
             if(req.files.length===0){
                 try{
                   if(campground.imageId &&  req.body.image!==campground.image && validator.isURL(req.body.image)){
@@ -182,7 +185,7 @@ router.put("/:id", middleware.checkCampOwnership,upload.any('image'),function(re
                   req.flash("error",err.message);
                   return res.redirect("back");  
                }
-            } //2.end
+            }
             campground.name = req.body.campground.name;
             campground.price = req.body.campground.price;
             campground.description = req.body.campground.description;
@@ -194,11 +197,24 @@ router.put("/:id", middleware.checkCampOwnership,upload.any('image'),function(re
 });
 //DESTROY CAMPGROUND ROUTE
 router.delete("/:id", middleware.checkCampOwnership,function(req, res){
-    Campground.findByIdAndRemove(req.params.id, function(err){
+    Campground.findById(req.params.id, async function(err, campground){
         if(err){
-            res.redirect("/campgrounds");
+            req.flash("error", err.message);
+            return res.redirect("back");
         } else {
-            res.redirect("/campgrounds");
+            try{
+                if(campground.imageId){
+                    await cloudinary.v2.uploader.destroy(campground.imageId);
+                }
+                campground.remove();
+                req.flash("success", "Campground deleted successfully!");
+                res.redirect("/campgrounds");
+            }catch(err){
+                if(err){
+                req.flash("error", err.message);
+                return res.redirect("back");
+                }
+            }
         }
     });
 });
