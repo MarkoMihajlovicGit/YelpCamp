@@ -58,58 +58,39 @@ router.get("/", function(req, res){
 
 //   *** CREATE ROUTE ---ADD NEW CAMPGROUND TO DB ***
 
-router.post("/", middleware.isLoggedIn,  upload.any("image"),function(req, res){
-    if(req.files.length>0){
-        
-        cloudinary.v2.uploader.upload(req.files[0].path, {width: 1000, height: 1000, crop: "limit"}, function(err, result){
+router.post("/", middleware.isLoggedIn,  upload.any("image"),async function(req, res){
+    try{
+        if(req.files.length>0){
+            var result = await cloudinary.v2.uploader.upload(req.files[0].path, {width: 1000, height: 1000, crop: "limit"});
+            req.body.campground.image = result.secure_url;
+            req.body.campground.imageId = result.public_id;
+        }
+        if(req.body.campground.imageId){
+           var imageId = req.body.campground.imageId;
+        }
+        var image = (req.body.campground.image) ? req.body.campground.image : req.body.image;
+        var name = req.body.campground.name;
+        var price = req.body.campground.price;
+        var desc = req.body.campground.description;
+        var author = {
+            id: req.user._id,
+            username:req.user.username
+        };
+        var newCampground = {name: name, price:price,image: image, imageId: imageId, description: desc, author: author};
+        Campground.create(newCampground, function(err, newlyCreated){
             if(err){
                 console.log(err);
-            }
-            //add cloudinary url for the image to the campground object under image property
-            req.body.campground.image = result.secure_url;
-            //add images public_id to campground object
-            req.body.campground.imageId = result.public_id;
-            //add author to campground
-            req.body.campground.author = {
-                id: req.user._id,
-                username: req.user.username
-            };
-            //eval(require("locus"))
-            Campground.create(req.body.campground, function(err, campground){
-                if(err){
-                    req.flash("error", err.message);
-                    return res.redirect('back');
-                }
+                req.flash("error", err.message);
+                return res.redirect('back');
+            } else {
                 req.flash("success", "New campground created successfully");
-                res.redirect("/campgrounds/" + campground.id);
-            });
-            
+                res.redirect("/campgrounds/" + newlyCreated.id);
+            }
         });
-    }else{
-    //get data from form and add to campgrounds array or DB
-    var name = req.body.campground.name;
-    var price = req.body.campground.price;
-    var image = req.body.image;
-    var desc = req.body.campground.description;
-    var author = {
-        id: req.user._id,
-        username:req.user.username
-    };
-    var newCampground = {name: name, price:price,image: image, description: desc, author: author}
-       //campgrounds.push(newCampground); switched with DB
-    // Create new campground and save to DB
-    Campground.create(newCampground, function(err, newlyCreated){
-        if(err){
-            console.log(err);
-            req.flash("error", err.message);
-            return res.redirect('back');
-        } else {
-            req.flash("success", "New campground created successfully");
-            res.redirect("/campgrounds/" + newlyCreated.id);
-        }
-    });
+    }catch(err){
+        req.flash("error",err.message);
+        return res.redirect("back");
     }
-     
 });
 
 // *** NEW --- SHOW FORM TO CREATE NEW CAMPGROUND ***
@@ -210,10 +191,8 @@ router.delete("/:id", middleware.checkCampOwnership,function(req, res){
                 req.flash("success", "Campground deleted successfully!");
                 res.redirect("/campgrounds");
             }catch(err){
-                if(err){
                 req.flash("error", err.message);
                 return res.redirect("back");
-                }
             }
         }
     });
