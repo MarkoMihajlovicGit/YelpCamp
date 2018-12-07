@@ -22,10 +22,10 @@ var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes      = require("./routes/index");
 
-//var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v15";
-//mongoose.connect(url, { useCreateIndex: true, useNewUrlParser: true });
+var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v15";
+mongoose.connect(url, { useCreateIndex: true, useNewUrlParser: true });
 //mongodb://<maklud>:<mak27lud>@ds143593.mlab.com:43593/yelpcamp
-mongoose.connect("mongodb://yelpcamp:mak27yelpcamp@ds127704.mlab.com:27704/yelpcamp", { useNewUrlParser: true });
+//mongoose.connect("mongodb://yelpcamp:mak27yelpcamp@ds127704.mlab.com:27704/yelpcamp", { useNewUrlParser: true });
 
 app.use(bodyParser.urlencoded({extended: true}));
 
