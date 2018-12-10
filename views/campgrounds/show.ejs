@@ -50,8 +50,11 @@
                            <strong><%=comment.author.username%></strong>
                         <span class="float-right"><%= moment(comment.createdAt).fromNow()%></span>
                         <p>
-                           <%=comment.text%>
+                            <%=comment.text%>
                         </p>
+                        <%if(comment.rating){%>
+                        <p class="starability-result" data-rating="<%=comment.rating%>"></p>
+                        <% }%>
                         <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
                         <a class="btn btn-sm btn-warning" 
                         href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit">

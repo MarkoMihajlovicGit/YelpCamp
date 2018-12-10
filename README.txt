@@ -9,3 +9,5 @@ SHOW    /dogs/:id       GET     Show info about ONE dog!!!
 EDIT    /dogs/:id/edit  GET     Show edit form for one dog
 UPDATE  /dogs/:id       PUT     Update a particular dog,then redirect somewhere
 DESTROY /dogs/:id       DELETE  Delete a particlula dog,then redirect somewhere
+
+ heroku config:set DATABASEURL=mongodb://yelpcamp:mak27yelpcamp@ds127704.mlab.com:27704/yelpcamp

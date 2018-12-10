@@ -22,7 +22,7 @@ var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes      = require("./routes/index");
 
-var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v15";
+var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v17";
 mongoose.connect(url, { useCreateIndex: true, useNewUrlParser: true });
 //mongoose.connect("mongodb://yelpcamp:mak27yelpcamp@ds127704.mlab.com:27704/yelpcamp", { useNewUrlParser: true });
 
