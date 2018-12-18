@@ -2,6 +2,7 @@ var express    = require("express"),
     router     = express.Router(),
     Campground = require("../models/campground"),
     User       = require("../models/user"),
+    Notification = require("../models/notification"),
     middleware = require("../middleware"),
     validator  = require('validator'),
     multer     = require("multer"),
@@ -77,16 +78,19 @@ router.post("/", middleware.isLoggedIn,  upload.any("image"),async function(req,
             username:req.user.username
         };
         var newCampground = {name: name, price:price,image: image, imageId: imageId, description: desc, author: author};
-        Campground.create(newCampground, function(err, newlyCreated){
-            if(err){
-                console.log(err);
-                req.flash("error", err.message);
-                return res.redirect('back');
-            } else {
-                req.flash("success", "New campground created successfully");
-                res.redirect("/campgrounds/" + newlyCreated.id);
-            }
-        });
+        var campground = await Campground.create(newCampground);
+        var user = await User.findById(req.user._id).populate('followers').exec();
+        var newNotification = {
+            username: req.user.username,
+            campgroundId: campground.id
+        }
+        for(var follower of user.followers) {
+            var notification = await Notification.create(newNotification);
+            follower.notifications.push(notification);
+            follower.save();
+        }
+        req.flash("success", "New campground created successfully");
+        res.redirect("/campgrounds/" + campground.id);
     }catch(err){
         req.flash("error",err.message);
         return res.redirect("back");

@@ -22,7 +22,7 @@ var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes      = require("./routes/index");
 
-var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v17";
+var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v19";
 mongoose.connect(url, { useCreateIndex: true, useNewUrlParser: true });
 //mongoose.connect("mongodb://yelpcamp:mak27yelpcamp@ds127704.mlab.com:27704/yelpcamp", { useNewUrlParser: true });
 
@@ -49,8 +49,19 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use(function(req, res, next){
+app.use(async function(req, res, next){
     res.locals.currentUser = req.user;
+    // if anyone is logged in by passport,than try catch...
+    if(req.user){
+      try{
+        // find user who is logged in and populate user notifications BUT ONLY the ones that havent been read yet!!!
+        var user = await User.findById(req.user._id).populate("notifications", null, {isRead: false}).exec();
+        res.locals.notifications = user.notifications.reverse();
+        //console.log(res.locals.notifications);
+      } catch(err) {
+          console.log(err.message);
+      }
+    }
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     res.locals.info = req.flash("info");

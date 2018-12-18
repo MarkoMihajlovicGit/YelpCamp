@@ -22,17 +22,24 @@
              <a class="nav-item nav-link active" href="/login">Login<span class="sr-only">(current)</span></a>
              <a class="nav-item nav-link" href="/register">Sign Up</a>
          <% }else{ %>
+          
+          <div class="dropdown show">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications<span class= "badge">
+              <%=notifications.length%>
+            </span></a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="/notifications">View past notifications</a>
+              <%notifications.forEach(function(notification){ %>
+              <li>
+                <a class="dropdown-item" href="/notifications/<%=notification.id%>"><%=notification.username%> created a new campground</a>
+              </li>
+              <% });%>
+            </div>
+          </div>
              <a class="nav-item nav-link" href="/users/<%=currentUser.id%>">Signed In As : <strong><%= currentUser.username %></strong></a>
              <a class="nav-item nav-link" href="/logout">Logout</a>
          <% } %>
-            <p>
-            <form class="form-inline" action="/campgrounds" method="GET"> 
-                <div class="form-group mr-auto">
-                    <input class="form-control mr-2" type="text" name="search" placeholder="Campground search...">
-                    <input class="btn btn-default" type="submit" value="Search">
-                </div>
-            </form>
-        </p>
         </div>
       </div>
     </nav>

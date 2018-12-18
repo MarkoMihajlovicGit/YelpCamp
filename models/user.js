@@ -10,6 +10,18 @@ var UserSchema = new mongoose.Schema({
         required: true
     },
     password: String,
+    notifications:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Notification"
+        }    
+    ],
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }    
+    ],
     avatar: String,
     firstName:String,
     lastName: String,
@@ -29,3 +41,7 @@ var UserSchema = new mongoose.Schema({
 UserSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model("User", UserSchema);
+
+// module.exports.addFollowers = function (req, res, next){
+//     User.findOneAndUpdate({_id: req.user._id}, {$push: {followers: req.body.id}}, next);
+// };

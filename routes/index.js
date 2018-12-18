@@ -7,6 +7,7 @@ var express    = require("express"),
     async      = require("async"),
     nodemailer = require("nodemailer"),
     crypto     = require("crypto"),
+  Notification = require("../models/notification"),
     middleware = require("../middleware");
     
 
@@ -188,27 +189,72 @@ router.post('/reset/:token', function(req, res) {
 
 // SHOW USERS PROFILE
 
-router.get("/users/:id", middleware.isLoggedIn,function(req,res){
-     User.findById(req.params.id, function(err, foundUser){
-        if(!validator.isURL(foundUser.avatar)){
+router.get("/users/:id", middleware.isLoggedIn, async function(req,res){
+  try{
+     var foundUser = await User.findById(req.params.id).populate("followers").exec();
+     if(!validator.isURL(foundUser.avatar)){
             foundUser.avatar= global.defaultAvatar;
-           
-        }
-        if(err || !foundUser){
-            req.flash("error", "Something went wrong.");
-            res.redirect("/");
-        }
-        //eval(require("locus"));
-        Campground.find().where("author.id").equals(foundUser._id).exec(function(err, campgrounds){
-            
-          if(err || !foundUser){
-              req.flash("error", "Something went wrong");
-              res.redirect("/");
-          }
-          res.render("users/show", {user: foundUser, campgrounds: campgrounds});
-        })
-    })
+     }
+     var campgrounds = await  Campground.find().where("author.id").equals(foundUser._id).exec();
+     res.render("users/show", {user: foundUser, campgrounds: campgrounds});
+  } catch(err){
+    if(err || !foundUser){
+        req.flash("error", "Something went wrong.");
+        res.redirect("/");
+    }
+  }
 });
+
+    // follow user
+    router.get('/follow/:id', middleware.isLoggedIn, async function(req, res) {
+      try {
+        let user = await User.findOneAndUpdate({_id: req.params.id},{$addToSet: {followers: req.user._id}});
+        req.flash('success', 'Successfully followed ' + user.username + '!');
+        res.redirect('/users/' + req.params.id);
+      } catch(err) {
+        req.flash('error', err.message);
+        res.redirect('back');
+      }
+    });
+    // unfollow user
+    router.get('/unfollow/:id', middleware.isLoggedIn, async function(req, res) {
+      try {
+        let user = await User.findOneAndUpdate({_id: req.params.id},{$pull: {followers: req.user._id}});
+        req.flash('success', 'Successfully unfollowed ' + user.username + '!');
+        res.redirect('/users/' + req.params.id);
+      } catch(err) {
+        req.flash('error', err.message);
+        res.redirect('back');
+      }
+    });
+
+    // view all notifications
+    router.get('/notifications', middleware.isLoggedIn, async function(req, res) {
+      try {
+        let user = await User.findById(req.user._id).populate({
+          path: 'notifications',
+          options: { sort: { "_id": -1 } }
+        }).exec();
+        let allNotifications = user.notifications;
+        res.render('notifications/index', { allNotifications });
+      } catch(err) {
+        req.flash('error', err.message);
+        res.redirect('back');
+      }
+    });
+    
+    // handle notification
+    router.get('/notifications/:id', middleware.isLoggedIn, async function(req, res) {
+      try {
+        let notification = await Notification.findById(req.params.id);
+        notification.isRead = true;
+        notification.save();
+        res.redirect(`/campgrounds/${notification.campgroundId}`);
+      } catch(err) {
+        req.flash('error', err.message);
+        res.redirect('back');
+      }
+    });
 
 //EDIT USER PROFILE
 router.get("/users/:id/edit", middleware.checkUser,function(req, res) {
