@@ -22,8 +22,6 @@ router.get("/register", function(req, res){
 });
 //handle sign up logic
 router.post("/register", function(req,res){
-    //req.body.username
-    //req.body.password
     var newUser = new User(
         {
             username:req.body.username,
@@ -53,7 +51,6 @@ router.post("/register", function(req,res){
 });
 
 //show login form
-// router.post("/login", middleware ,callbackfunct);
 router.get("/login", function(req, res) {
     res.render("login");
 });
@@ -187,25 +184,7 @@ router.post('/reset/:token', function(req, res) {
   });
 });
 
-// SHOW USERS PROFILE
-
-router.get("/users/:id", middleware.isLoggedIn, async function(req,res){
-  try{
-     var foundUser = await User.findById(req.params.id).populate("followers").exec();
-     if(!validator.isURL(foundUser.avatar)){
-            foundUser.avatar= global.defaultAvatar;
-     }
-     var campgrounds = await  Campground.find().where("author.id").equals(foundUser._id).exec();
-     res.render("users/show", {user: foundUser, campgrounds: campgrounds});
-  } catch(err){
-    if(err || !foundUser){
-        req.flash("error", "Something went wrong.");
-        res.redirect("/");
-    }
-  }
-});
-
-    // follow user
+ // follow user
     router.get('/follow/:id', middleware.isLoggedIn, async function(req, res) {
       try {
         let user = await User.findOneAndUpdate({_id: req.params.id},{$addToSet: {followers: req.user._id}});
@@ -256,39 +235,6 @@ router.get("/users/:id", middleware.isLoggedIn, async function(req,res){
       }
     });
 
-//EDIT USER PROFILE
-router.get("/users/:id/edit", middleware.checkUser,function(req, res) {
-    User.findById(req.params.id, function(err, foundUser){
-        res.render("users/edit", {user: foundUser}); 
-    }); 
-});
-//UPDATE USER PROFILE
-router.put("/users/:id", middleware.checkUser, middleware.validateAvatar,function(req, res){
-    //find and update correct campground
-    User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedUser){
-        
-        if(err){
-            req.flash("error", "Something went wrong.");
-            res.redirect("/campgrounds");
-        }else {
-            //eval(require("locus"));
-            req.flash("success", "User profile updated.");
-            res.redirect("/users/"+ req.params.id);
-        }
-    });
-    //redirect somewhere(showpage)
-});
-//DESTROY USER PROFILE
-router.delete("/users/:id", middleware.checkUser,function(req, res){
-    User.findByIdAndRemove(req.params.id, function(err, foundUser){
-        if(err){
-            req.flash("error", "You dont have permission to do that");
-            res.redirect("/users/"+ req.params.id);
-        } else{
-            req.flash("success", "User profile deleted.")
-            res.redirect("/campgrounds");
-        }
-    });
-});
+
 
 module.exports = router;

@@ -20,7 +20,8 @@ global.defaultAvatar = "https://images.onepixel.com/bd716865-bb64-72c4-666c-1a56
 // requiring routes   
 var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
-    indexRoutes      = require("./routes/index");
+    indexRoutes      = require("./routes/index"),
+    userRoutes      = require("./routes/user");
 
 var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v19";
 mongoose.connect(url, { useCreateIndex: true, useNewUrlParser: true });
@@ -70,6 +71,7 @@ app.use(async function(req, res, next){
 
 app.use("/" ,indexRoutes);
 app.use("/campgrounds",campgroundRoutes);
+app.use("/users",userRoutes);
 app.use("/campgrounds/:id/comments" ,commentRoutes);
 
 app.listen(process.env.PORT, process.env.IP, function(){

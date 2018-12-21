@@ -22,20 +22,22 @@
              <form class="deleteForm" action="/users/<%= user._id%>?_method=DELETE" method="POST">
                  <button class="btn btn-block btn-danger">Delete</button>
              </form>
-        <% }%>
-       <% var followers=[];%>
-       <%for(var i=0; i < user.followers.length; i++){ %>
-           <%var follower = user.followers[i];%>
-           <%  followerId = follower.id;%>
-           <% followers.push(followerId);%>
+        <% }else{ %>
+           <% var followers=[];%>
+           <%for(var i=0; i < user.followers.length; i++){ %>
+               <%var follower = user.followers[i];%>
+               <%  followerId = follower.id;%>
+               <% followers.push(followerId);%>
+           <% }%>
+           <%if(followers.indexOf(currentUser.id)===-1){%>
+              <!--if dont match(currentUser is not a follower) display Follow Button-->
+                <a href="/follow/<%= user.id %>"><button class="btn btn-block btn-info mt-2">Follow <%= user.username %></button></a>
+           <% }else{%>
+                <!--if match(currentUser is a follower) display unfollow button-->
+                <a href="/unfollow/<%= user.id %>"><button class="btn btn-block btn-info mt-2">Unfollow <%= user.username %></button></a>
+           <% }%>
        <% }%>
-       <%if(followers.indexOf(currentUser.id)===-1){%>
-          <!--if dont match(currentUser is not a follower) display Follow Button-->
-            <a href="/follow/<%= user.id %>"><button class="btn btn-block btn-info mt-2">Follow <%= user.username %></button></a>
-       <% }else{%>
-            <!--if match(currentUser is a follower) display unfollow button-->
-            <a href="/unfollow/<%= user.id %>"><button class="btn btn-block btn-info mt-2">Unfollow <%= user.username %></button></a>
-       <% }%>
+       
        
        </div>
      </div>
