@@ -23,7 +23,6 @@
                  <button class="btn btn-block btn-danger">Delete</button>
              </form>
         <% }else{ %>
-              <%if(currentUser && user._id.equals(!currentUser.id)){%>
                <% var followers=[];%>
                <%for(var i=0; i < user.followers.length; i++){ %>
                    <%var follower = user.followers[i];%>
@@ -37,7 +36,7 @@
                     <!--if match(currentUser is a follower) display unfollow button-->
                     <a href="/unfollow/<%= user.id %>"><button class="btn btn-block btn-info mt-2">Unfollow <%= user.username %></button></a>
                <% }%>
-              <% } %>
+             
        <% }%>
        
        
