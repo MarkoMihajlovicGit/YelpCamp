@@ -3,8 +3,8 @@
 
 
 <div class="row">
-  <div class="col-md-5">
-     <div class="card" style="width: 18rem; margin-top: 15px;">
+  <div class="col-md-5 col-xs-12">
+     <div class="card" style="width: 18rem; margin: 15px auto 0 ;">
         <img class="card-img-top" src="<%= user.avatar %>" alt="user avatar">
       <div class="card-body">
         <h5 class="card-title">
@@ -46,7 +46,7 @@
   <div class="col-md-7">
     <div class="mt-3 " id="userCampgrounds">
         <h3><%= capA(user.username)%>'s campgrounds:</h3>
-      <ul>
+      <ul id="userList">
           <% campgrounds.forEach(function(campground){ %>
             <li><a href="/campgrounds/<%=campground.id%>"><%= campground.name%></a></li>
           <% })%>
