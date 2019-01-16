@@ -41,8 +41,11 @@ body {
     font-weight: bold;
 }
 .jumbotron {
-   background-image: url(https://res.cloudinary.com/mmwebdesign/image/upload/v1545839378/lfsw4hr7s70vegfspe17.jpg); 
+   background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.2)),url(https://res.cloudinary.com/mmwebdesign/image/upload/v1545839378/lfsw4hr7s70vegfspe17.jpg); 
+   
 }
+
+
 .jumbotron h1 {
     color: #e9ecef;
     text-shadow: 2px 2px #282923;
@@ -68,6 +71,7 @@ body {
 }
 #searchBtn{
     background-color: gold;
+   
 }
 #notifications{
     background-color: #d55a07;
@@ -96,5 +100,37 @@ footer p{
 #userList a:hover{
   font-weight: bold;  
 }
+/* style buttons*/
+
+#loginBtn{
+  outline:none;
+  border:none;
+  cursor:pointer;
+  display:block;
+  position:relative;
+  background-color:#3F7BFA;
+  font-size:16px;
+  font-weight:bold;
+  color:white;
+  text-transform: uppercase;
+  letter-spacing:2px;
+  padding:15px 30px;
+  margin: 0px auto;
+  border-radius:20px;
+  box-shadow: 0 6px #264C99;
+}
+#loginBtn:hover{
+  box-shadow:0 4px #264C99;
+  top: 2px;
+}
+#loginBtn:active{
+  box-shadow:none;
+  top: 6px;
+}
+.btn{
+    color:white;
+}
+
+
 
 
