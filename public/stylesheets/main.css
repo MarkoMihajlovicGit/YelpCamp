@@ -82,7 +82,6 @@ body {
 footer {
    background: #ffc32b;
    position:absolute;
-   bottom:0;
    width:100%;
    height:2.5em;   /* Height of the footer */
    line-height: 2.5em; /* Vertically center the text there */
@@ -102,31 +101,7 @@ footer p{
 }
 /* style buttons*/
 
-#loginBtn{
-  outline:none;
-  border:none;
-  cursor:pointer;
-  display:block;
-  position:relative;
-  background-color:#3F7BFA;
-  font-size:16px;
-  font-weight:bold;
-  color:white;
-  text-transform: uppercase;
-  letter-spacing:2px;
-  padding:15px 30px;
-  margin: 0px auto;
-  border-radius:20px;
-  box-shadow: 0 6px #264C99;
-}
-#loginBtn:hover{
-  box-shadow:0 4px #264C99;
-  top: 2px;
-}
-#loginBtn:active{
-  box-shadow:none;
-  top: 6px;
-}
+
 .btn{
     color:white;
 }
