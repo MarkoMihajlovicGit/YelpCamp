@@ -1,11 +1,5 @@
-RESTFUL ROUTES
+YelpCamp
+YelpCamp is a project that was completed as a part of Colt Steele's bootcamp. My version of YelpCamp has a few tweaks beyond what was coded in class.
 
-name    url             verb    desc.
-=======================================
-INDEX   /dogs           GET     Display a list of all dogs
-NEW     /dogs/new       GET     Displays form to make a new dog
-CREATE  /dogs           POST    Add new dogs to DB!!!
-SHOW    /dogs/:id       GET     Show info about ONE dog!!!
-EDIT    /dogs/:id/edit  GET     Show edit form for one dog
-UPDATE  /dogs/:id       PUT     Update a particular dog,then redirect somewhere
-DESTROY /dogs/:id       DELETE  Delete a particlula dog,then redirect somewhere
+Setup
+Different setups are needed if you plan on using YelpCamp locally (or Cloud9) verus the Heroku + MongoLab setup. This is accomplished using enviornment variables.
